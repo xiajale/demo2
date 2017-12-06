@@ -13,7 +13,10 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
 
 /**
  * Created by zhouyibin on 2017/12/6.
@@ -79,4 +82,15 @@ public class FileUtil {
 
     }
 
+    public static KeyStore getKeyStore(String path, char[] chars) {
+        try {
+            KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+            InputStream inputStream = new FileInputStream(new File(path));
+            keystore.load(inputStream, chars);
+            inputStream.close();
+            return keystore;
+        } catch (Exception e) {
+            throw new RuntimeException("Something went wrong reading keystore", e);
+        }
+    }
 }

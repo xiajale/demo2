@@ -12,7 +12,6 @@ public class IDPMetadataHandlerFact {
     private static final String IDP_METADATA_PATH = PropertityUtil.getProperty("idp.metadata.file");
 
     private IDPMetadataHandlerFact(){
-
     }
 
     public static IDPMetadataHandler getInstance(){

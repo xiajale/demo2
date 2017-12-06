@@ -1,7 +1,13 @@
 package com.huawei.cloud.util;
 
+import com.huawei.cloud.metadata.IDPMetadataHandler;
 import org.opensaml.core.xml.XMLObjectBuilderFactory;
 import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
+import org.opensaml.core.xml.io.MarshallingException;
+import org.opensaml.saml.common.SignableSAMLObject;
+import org.opensaml.xmlsec.signature.Signature;
+import org.opensaml.xmlsec.signature.support.SignatureException;
+import org.opensaml.xmlsec.signature.support.Signer;
 
 import javax.xml.namespace.QName;
 
@@ -23,6 +29,21 @@ public class OpenSamlUtil {
         }
 
         return object;
+    }
+
+    public static void signObject(IDPMetadataHandler idpMetadataHandler, SignableSAMLObject object){
+        Signature signature = idpMetadataHandler.getSignature();
+        object.setSignature(signature);
+        try {
+            XMLObjectProviderRegistrySupport.getMarshallerFactory().getMarshaller(object).marshall(object);
+        } catch (MarshallingException e) {
+            e.printStackTrace();
+        }
+        try {
+            Signer.signObject(signature);
+        } catch (SignatureException e) {
+            e.printStackTrace();
+        }
     }
 
 }
